@@ -1,0 +1,26 @@
+{
+  "name": "mood-tracker",
+  "version": "1.0.0",
+  "description": "A web app project for tracking moods and journaling every day",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server",
+    "server": "nodemon server",
+    "client": "npm start --prefix expense-tracker-react",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "Terence Lo",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.7"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.4"
+  }
+}
