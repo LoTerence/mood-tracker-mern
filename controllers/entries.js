@@ -126,7 +126,7 @@ exports.editEntryPatch = async (req, res) => {
     const entry = await Entry.findByIdAndUpdate(
       req.params.id,
       { $set: req.body }, // replaces the value in the req.body object, ends up being the entry moodcolor or entry body
-      { new: true } // returns the new updated entry
+      { new: true, useFindAndModify: false } // returns the new updated entry
     );
 
     if (!entry) {
@@ -177,3 +177,4 @@ exports.deleteEntry = async (req, res) => {
     });
   }
 };
+// check if req.user matches entry author

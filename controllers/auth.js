@@ -1,30 +1,23 @@
 const bcrypt = require("bcryptjs"); //hash users password
 const jwt = require("jsonwebtoken"); //auth token that signifies user is logged in
 const User = require("../models/user");
-require("dotenv").config({ path: "../config/config.env" });
 
 // function for signing tokens
 const createAccessToken = (username) => {
-  return jwt.sign(
-    {
-      username,
-    },
-    process.env.JWT_SECRET_KEY,
-    {
-      expiresIn: "2 days",
-    }
-  );
+  return jwt.sign({ username }, process.env.JWT_SECRET_KEY, {
+    expiresIn: "2 days",
+  });
 };
 
 // @desc create a user
-// @route POST /api/auth/
+// @route POST /auth/
 // @access public
 exports.createUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
     if (password.length < 6) {
-      return res.status(500).json({
+      return res.status(400).json({
         success: false,
         error: "Password length must be greater than 6 characters.",
       });
@@ -37,6 +30,7 @@ exports.createUser = async (req, res) => {
     });
 
     const data = await newUser.save();
+    data.passwordHash = "Your mum"; // hide the password hash in the json response
 
     const token = createAccessToken(newUser.username);
 
@@ -49,7 +43,8 @@ exports.createUser = async (req, res) => {
   } catch (err) {
     console.log(err);
     if (err.name === "MongoError") {
-      return res.status(500).json({
+      // change this to validation error
+      return res.status(409).json({
         success: false,
         error: `User ${err.keyValue["username"]} already exists. Try logging in.`,
       });
@@ -63,7 +58,7 @@ exports.createUser = async (req, res) => {
 };
 
 // @desc log a user in
-// @route POST /api/auth/login
+// @route POST /auth/login
 // @access public
 exports.loginUser = async (req, res) => {
   try {
@@ -72,18 +67,19 @@ exports.loginUser = async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user) {
-      return res.status(500).json({
+      return res.status(401).json({
         success: false,
         error: `No User with that username: ${username}`,
       });
     } else if (!bcrypt.compareSync(password, user.passwordHash)) {
-      res.status(500).json({
+      res.status(401).json({
         success: false,
         error: "Invalid Password",
       });
     }
 
     const token = createAccessToken(user.username);
+    user.passwordHash = "Your mum"; // hide the password hash in the json response
 
     return res.status(201).json({
       success: true,
