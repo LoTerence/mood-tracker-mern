@@ -3,6 +3,7 @@ import { Link, withRouter, Redirect } from "react-router-dom";
 import axios from "axios";
 import { Grid, Card, Typography, Button, TextField } from "@material-ui/core";
 import { useAuth } from "../../context/auth";
+import Appbar from "../appbar/Appbar";
 
 function Login() {
   const [isError, setIsError] = useState(false);
@@ -69,8 +70,9 @@ function Login() {
       xs={12}
       justify="center"
       alignItems="center"
-      style={{ height: "100%" }}
+      style={{ position: "relative", height: "100%", top: "100px" }}
     >
+      <Appbar />
       <Grid
         container
         direction="column"
@@ -101,6 +103,7 @@ function Login() {
           );
         })}
         <Link to="/register">Don't have an account? Sign up</Link>
+        <p>Use username: testuser1, password: 123456, for testing and seeing the app</p>
         {isError && <p>The username or password provided were incorrect!</p>}
       </Grid>
     </Grid>

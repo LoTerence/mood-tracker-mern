@@ -5,6 +5,8 @@ import { useAuth } from "./auth";
 
 // Initial State
 const initialState = {
+  contentComponent: "Home",
+  currentEntry: {},
   journal: [],
   error: null,
   loading: true,
@@ -19,6 +21,21 @@ export const GlobalProvider = ({ children }) => {
   const { user, authToken } = useAuth();
 
   // Actions
+  function displayContent(contentName) {
+    dispatch({
+      type: "CHANGE_CONTENT",
+      payload: contentName,
+    });
+  }
+
+  function changeCurrentEntry(entry) {
+    dispatch({
+      type: "CHANGE_CURRENT_ENTRY",
+      payload: entry,
+    });
+  }
+
+  // Server stuff
   async function getJournal() {
     try {
       const res = await axios.get("/api/entry", {
@@ -34,18 +51,41 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: "ENTRY_ERROR",
-        payload: err.response.data.error,
+        payload: err, // TODO Error: Couldnt read data from undefined response
+      });
+    }
+  }
+
+  async function addEntry(entry) {
+    try {
+      entry.author = user.username;
+      const res = await axios.post("/api/entry", entry, {
+        headers: {
+          "x-auth-token": authToken,
+        },
+      });
+
+      dispatch({
+        type: "ADD_ENTRY",
+        payload: res.data.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: "ENTRY_ERROR",
+        payload: err, // TODO Error: Couldnt read data from undefined response
       });
     }
   }
 
   async function deleteEntry(id) {}
 
-  async function addEntry(entry) {}
-
   return (
     <GlobalContext.Provider
       value={{
+        contentComponent: state.contentComponent,
+        displayContent,
+        currentEntry: state.currentEntry,
+        changeCurrentEntry,
         journal: state.journal,
         getJournal,
         error: state.error,

@@ -33,7 +33,10 @@ function Appbar() {
   };
 
   return (
-    <AppBar position="static" style={{ marginBottom: "30px", background: "#3fc5f0" }}>
+    <AppBar
+      position="fixed"
+      style={{ marginBottom: "30px", background: "#3fc5f0", zIndex: 99 }}
+    >
       {authToken ? (
         <Menu
           id="menu"
@@ -43,7 +46,10 @@ function Appbar() {
           onClose={() => closeMenu}
         >
           <MenuItem onClick={() => closeMenu()}>
-            <Link to="/dashboard" style={{ textDecoration: "none", color: "#000" }}>
+            <Link
+              to="/dashboard"
+              style={{ textDecoration: "none", color: "#000" }}
+            >
               Home
             </Link>
           </MenuItem>
@@ -52,9 +58,7 @@ function Appbar() {
               Log out
             </Link>
           </MenuItem>
-          <MenuItem onClick={() => closeMenu()}>
-            Close Menu
-          </MenuItem>
+          <MenuItem onClick={() => closeMenu()}>Close Menu</MenuItem>
         </Menu>
       ) : null}
       <Toolbar>

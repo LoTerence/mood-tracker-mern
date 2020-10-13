@@ -7,12 +7,11 @@ import { GlobalProvider } from "./context/GlobalState";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import Dashboard from "./components/pages/Dashboard";
-import Appbar from "./components/appbar/Appbar";
 
 function App() {
   const existingToken = localStorage.getItem("token") || ""; // might need to json.parse this if its a str
   const [authToken, setAuthToken] = useState(existingToken);
-  const existingUser = JSON.parse(localStorage.getItem("userData")) || {}; 
+  const existingUser = JSON.parse(localStorage.getItem("userData")) || {};
   const [user, setUser] = useState(existingUser);
 
   const setToken = (data) => {
@@ -46,7 +45,6 @@ function App() {
     >
       <GlobalProvider>
         <BrowserRouter>
-          <Appbar />
           <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/login" component={Login} />

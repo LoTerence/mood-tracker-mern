@@ -3,6 +3,7 @@ import { Link, withRouter, Redirect } from "react-router-dom";
 import axios from "axios";
 import { Grid, Card, Typography, Button, TextField } from "@material-ui/core";
 import { useAuth } from "../../context/auth";
+import Appbar from "../appbar/Appbar";
 
 function Register() {
   const [isError, setIsError] = useState(false);
@@ -81,8 +82,9 @@ function Register() {
       xs={12}
       justify="center"
       alignItems="center"
-      style={{ height: "100%" }}
+      style={{ position: "relative", height: "100%", top: "100px" }}
     >
+      <Appbar />
       <Grid
         container
         direction="column"
