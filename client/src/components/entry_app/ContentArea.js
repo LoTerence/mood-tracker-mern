@@ -17,7 +17,7 @@ export default function ContentArea() {
       case "NewEntryForm":
         return <NewEntryForm />;
       case "EntryView":
-        return <EntryView/>;
+        return <EntryView />;
       default:
         return <Home />;
     }

@@ -103,7 +103,7 @@ function Login() {
           );
         })}
         <Link to="/register">Don't have an account? Sign up</Link>
-        <p>Use username: testuser1, password: 123456, for testing and seeing the app</p>
+        <p>Use username: testuser1, password: 123456, for testing and previewing the app</p>
         {isError && <p>The username or password provided were incorrect!</p>}
       </Grid>
     </Grid>
