@@ -4,6 +4,7 @@ import { Grid, Toolbar, Card } from "@material-ui/core";
 import Home from "./Home";
 import NewEntryForm from "./NewEntryForm";
 import EntryView from "./EntryView";
+import EditEntryForm from "./EditEntryForm";
 
 /* changes content component depending on what button in the global app is clicked, based on contentComponent property in Global state */
 
@@ -18,6 +19,8 @@ export default function ContentArea() {
         return <NewEntryForm />;
       case "EntryView":
         return <EntryView />;
+      case "EditEntry":
+        return <EditEntryForm />;
       default:
         return <Home />;
     }

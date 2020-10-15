@@ -13,15 +13,16 @@ import {
   FormHelperText,
 } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
-import CancelIcon from '@material-ui/icons/Cancel';
+import CancelIcon from "@material-ui/icons/Cancel";
+import { formatDateTitle } from "../../utils/convertDateString";
 
-function NewEntryForm() {
-  const { addEntry, displayContent } = useContext(GlobalContext);
-  const [question1, setQuestion1] = useState("");
-  const [question2, setQuestion2] = useState("");
-  const [question3, setQuestion3] = useState("");
-  const [question4, setQuestion4] = useState("");
-  const [moodColor, setMoodColor] = useState("");
+export default function EditEntryForm() {
+  const { currentEntry, displayContent, editEntry } = useContext(GlobalContext);
+  const [question1, setQuestion1] = useState(currentEntry.body.question1);
+  const [question2, setQuestion2] = useState(currentEntry.body.question2);
+  const [question3, setQuestion3] = useState(currentEntry.body.question3);
+  const [question4, setQuestion4] = useState(currentEntry.body.question4);
+  const [moodColor, setMoodColor] = useState(currentEntry.moodColor);
   const [colorHelperText, setColorHelperText] = useState(""); // for helping to make sure one of the mood color radio buttons is picked
   const [colorErr, setColorErr] = useState(false); // for helping to make sure one of the mood color radio buttons is picked
 
@@ -39,7 +40,7 @@ function NewEntryForm() {
       return;
     }
 
-    const newEntry = {
+    const editedEntry = {
       body: {
         question1,
         question2,
@@ -48,19 +49,26 @@ function NewEntryForm() {
       },
       moodColor,
     };
-    await addEntry(newEntry);
+
+    await editEntry(currentEntry._id, editedEntry); // get this right
+    
     displayContent("EntryView");
   };
 
   return (
     <>
       <Grid container item xs={12} justify="center">
+        <Typography variant="h4" color="primary">
+          Edit Daily Mood Entry
+        </Typography>
+      </Grid>
+      <Grid container item xs={12} justify="center">
         <Typography variant="h3" color="primary">
-          New Daily Mood Entry
+          {formatDateTitle(currentEntry.createdAt)}
         </Typography>
       </Grid>
       <Grid container item direction="column" alignItems="stretch" xs={12}>
-        <Typography variant="body1">What did you do today? </Typography>
+        <Typography variant="body1">What did you do this day? </Typography>
         <TextField
           placeholder="What happened today?"
           name="question1"
@@ -138,25 +146,21 @@ function NewEntryForm() {
           onClick={(e) => handleSubmit(e)}
           startIcon={<SaveIcon />}
         >
-          Save New Mood Entry
+          Save Edited Mood Entry
         </Button>
         <Button
           variant="contained"
           color="secondary"
-          onClick={(e) => displayContent("Home")}
+          onClick={(e) => displayContent("EntryView")}
           startIcon={<CancelIcon />}
         >
-          Cancel / Discard New Entry
+          Cancel / Discard Edited Entry
         </Button>
       </Grid>
     </>
   );
 }
 
-export default NewEntryForm;
-
-/*
-Component that represents the UI window that lets the user save a new Entry into their journal
-It should have mood color selecting input
-Save button should call post method to server in globalstate
+/* 
+Component that lets user edit an entry, appears after clicking on edit entry button in entry view
 */

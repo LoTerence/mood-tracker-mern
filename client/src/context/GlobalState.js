@@ -77,21 +77,60 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
-  async function deleteEntry(id) {}
+  async function editEntry(entryId, editedEntry) {
+    try {
+      const res = await axios.put("/api/entry/" + entryId, editedEntry, {
+        headers: {
+          "x-auth-token": authToken,
+        },
+      });
+
+      dispatch({
+        type: "EDIT_ENTRY",
+        payload: res.data.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: "ENTRY_ERROR",
+        payload: err, // TODO Error: Couldnt read data from undefined response
+      });
+    }
+  }
+
+  async function deleteEntry(id) {
+    try {
+      await axios.delete("/api/entry/" + id, {
+        headers: {
+          "x-auth-token": authToken,
+        },
+      });
+
+      dispatch({
+        type: "DELETE_ENTRY",
+        payload: { id },
+      });
+    } catch (err) {
+      dispatch({
+        type: "ENTRY_ERROR",
+        payload: err,
+      });
+    }
+  }
 
   return (
     <GlobalContext.Provider
       value={{
         contentComponent: state.contentComponent,
-        displayContent,
         currentEntry: state.currentEntry,
-        changeCurrentEntry,
         journal: state.journal,
-        getJournal,
         error: state.error,
         loading: state.loading,
-        deleteEntry,
+        displayContent,
+        changeCurrentEntry,
+        getJournal,
         addEntry,
+        editEntry,
+        deleteEntry,
       }}
     >
       {children}

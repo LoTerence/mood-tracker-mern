@@ -18,18 +18,26 @@ export default (state, action) => {
         loading: false,
         journal: action.payload,
       };
-    case "DELETE_ENTRY":
-      return {
-        ...state,
-        transactions: state.transactions.filter(
-          (transaction) => transaction._id !== action.payload
-        ),
-      };
     case "ADD_ENTRY":
       return {
         ...state,
         loading: false,
         journal: [...state.journal, action.payload],
+        currentEntry: action.payload,
+      };
+    case "EDIT_ENTRY":
+      return {
+        ...state,
+        loading: false,
+        // journal: [...state.journal, action.payload], // maybe should use a find and replace array function to change the old entry to the edited one
+        currentEntry: action.payload,
+      };
+    case "DELETE_ENTRY":
+      return {
+        ...state,
+        journal: state.journal.filter(
+          (entry) => entry._id !== action.payload.id
+        ),
       };
     case "ENTRY_ERROR":
       return {
